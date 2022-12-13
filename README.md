@@ -26,3 +26,29 @@ flowchart TD
     classDef sup fill:#696;
     class dsup,wsup sup;
 ```
+
+## Sequence diagram
+
+```mermaid
+sequenceDiagram
+participant P as Pathfinder
+participant W as Worker
+participant G as Gatherer
+participant R as Results
+activate W
+W ->> P: next_path
+P ->> W: path
+W -) G: {path, hash}
+G -) R: {path, hash}
+W ->> P: next_path
+P ->> W: path
+W -) G: {path, hash}
+G -) R: {path, hash}
+W ->> P: next_path
+P ->> W: nil
+W -) G: :done
+G ->> R: get_results
+R ->> G: results
+
+deactivate W
+```
