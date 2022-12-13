@@ -16,7 +16,17 @@ defmodule Duper.Gatherer do
 
   # server
   def init(worker_count) do
+    # sends a message to itself to initialize the workers
+    # by that time, the Gatherer process will be up and running
+    Process.send_after(self(), :kickoff, 0)
     {:ok, worker_count}
+  end
+
+  def handle_info(:kickoff, worker_count) do
+    1..worker_count
+    |> Enum.each(fn _ -> Duper.WorkerSupervisor.add_worker() end)
+
+    {:noreply, worker_count}
   end
 
   def handle_cast(:done, _worker_count = 1) do
