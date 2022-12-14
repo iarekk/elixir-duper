@@ -2,14 +2,20 @@ defmodule Duper.ResultsTest do
   use ExUnit.Case
   alias Duper.Results
 
-  test "can add entries to the results" do
-    Results.add_hash("path1", 123)
-    Results.add_hash("path2", 456)
-    Results.add_hash("path3", 123)
-    Results.add_hash("path4", 789)
-    Results.add_hash("path5", 789)
+  setup do
+    pid = start_supervised!(Results)
+    {:ok, sut: pid}
+  end
 
-    duplicates = Results.find_dupicates()
+  test "can add entries to the results", state do
+    pid = state[:sut]
+    GenServer.cast(pid, {:hash_add, "path1", 123})
+    GenServer.cast(pid, {:hash_add, "path2", 456})
+    GenServer.cast(pid, {:hash_add, "path3", 123})
+    GenServer.cast(pid, {:hash_add, "path4", 789})
+    GenServer.cast(pid, {:hash_add, "path5", 789})
+
+    duplicates = GenServer.call(pid, :find_duplicates)
     assert length(duplicates) == 2
     assert ~w(path3 path1) in duplicates
     assert ~w(path5 path4) in duplicates
