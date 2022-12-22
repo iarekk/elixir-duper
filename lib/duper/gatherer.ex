@@ -23,6 +23,8 @@ defmodule Duper.Gatherer do
   end
 
   def handle_info(:kickoff, worker_count) do
+    IO.puts("Starting the work with #{worker_count} workers")
+
     1..worker_count
     |> Enum.each(fn _ -> Duper.WorkerSupervisor.add_worker() end)
 
