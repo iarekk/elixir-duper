@@ -11,16 +11,20 @@ defmodule Duper.Pathfinder do
   end
 
   def init(path) do
-    DirWalker.start_link(path)
+    dir_walker().start_link(path)
   end
 
   def handle_call(:next_path, _from, dirwalker) do
     path =
-      case DirWalker.next(dirwalker) do
+      case dir_walker().next(dirwalker) do
         [path] -> path
         other -> other
       end
 
     {:reply, path, dirwalker}
+  end
+
+  def dir_walker() do
+    Application.get_env(:duper, :dir_walker, DirWalker)
   end
 end
