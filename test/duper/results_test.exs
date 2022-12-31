@@ -3,7 +3,12 @@ defmodule Duper.ResultsTest do
   alias Duper.Results
 
   setup do
-    pid = start_supervised!(Results)
+    child_spec = %{
+      id: Results,
+      start: {Results, :start_link, [[], [name: :test]]}
+    }
+
+    pid = start_supervised!(child_spec)
     {:ok, sut: pid}
   end
 

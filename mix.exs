@@ -8,7 +8,7 @@ defmodule Duper.MixProject do
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -20,12 +20,6 @@ defmodule Duper.MixProject do
     ]
   end
 
-  def aliases do
-    [
-      test: "test --no-start"
-    ]
-  end
-
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -33,5 +27,13 @@ defmodule Duper.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
+  end
+
+  def elixirc_paths(:test) do
+    ["lib", "test/support"]
+  end
+
+  def elixirc_paths(_) do
+    ["lib"]
   end
 end
