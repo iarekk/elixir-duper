@@ -27,6 +27,6 @@ defmodule Duper.Worker do
   end
 
   def hasher() do
-    Application.get_env(:duper, :hasher, Duper.Hasher)
+    Application.get_env(:duper, :hasher)
   end
 end

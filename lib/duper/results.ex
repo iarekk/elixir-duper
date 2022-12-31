@@ -4,8 +4,10 @@ defmodule Duper.Results do
 
   # public API
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, :no_args, name: @me)
+  def start_link(_, opts \\ []) do
+    name = Keyword.get(opts, :name, @me)
+    IO.puts("name: #{name}")
+    GenServer.start_link(__MODULE__, :no_args, name: name)
   end
 
   def add_hash(path, hash) do

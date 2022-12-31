@@ -25,6 +25,7 @@ defmodule Duper.Pathfinder do
   end
 
   def dir_walker() do
-    Application.get_env(:duper, :dir_walker, DirWalker)
+    Application.get_env(:duper, :dir_walker)
+    # Application.get_env(:duper, :dir_walker, DirWalker)
   end
 end
