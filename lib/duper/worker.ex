@@ -21,19 +21,12 @@ defmodule Duper.Worker do
   end
 
   def add_result(path) do
-    Duper.Gatherer.result(path, hash_of_file_at(path))
+    Duper.Gatherer.result(path, hasher().hash_of_file_at(path))
     send(self(), :do_one_file)
     {:noreply, nil}
   end
 
-  def hash_of_file_at(path) do
-    File.stream!(path, [], 1024_1024)
-    |> Enum.reduce(
-      :crypto.hash_init(:md5),
-      fn block, hash ->
-        :crypto.hash_update(hash, block)
-      end
-    )
-    |> :crypto.hash_final()
+  def hasher() do
+    Application.get_env(:duper, :hasher)
   end
 end
